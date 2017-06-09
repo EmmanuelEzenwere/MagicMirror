@@ -47,7 +47,7 @@ def malicha_brain():
     return Post(json_requests).get_post()  # render_template("base.html")
 
 @app.route('/www.malicha-ai.herokuapp.com/') # www.malicha-ai.herokuapp.com/')
-def welcome_page():
+def home_page():
     """
 
     :return:
