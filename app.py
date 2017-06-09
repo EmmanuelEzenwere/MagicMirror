@@ -37,7 +37,7 @@ app = Flask(__name__)
 # app.config.from_object('config')
 
 
-@app.route('https://malicha-ai.herokuapp.com/cognify')
+@app.route('https://malicha-ai.herokuapp.com/cognify/')
 def malicha_brain():
     """
 
