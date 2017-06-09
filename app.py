@@ -46,6 +46,14 @@ def malicha_brain():
     json_requests = query()
     return Post(json_requests).get_post()  # render_template("base.html")
 
+@app.route('/www.malicha-ai.herokuapp.com/') # www.malicha-ai.herokuapp.com/')
+def welcome_page():
+    """
+
+    :return:
+    """
+    return "<h1>Welcome to Malicha, The Future Of Fashion</h1>" # render_template("base.html")
+
 
 @app.route('/') # www.malicha-ai.herokuapp.com/')
 def welcome_page():
@@ -53,7 +61,7 @@ def welcome_page():
 
     :return:
     """
-    return render_template("base.html")
+    return "<h1>Welcome to Malicha</h1>" # render_template("base.html")
 
 
 # if __name__ == '__main__':
