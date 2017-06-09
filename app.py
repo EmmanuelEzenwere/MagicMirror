@@ -14,21 +14,21 @@ __author__ = 'nuelsian'
 # Blueprint("main page", __name__, template_folder="templates")
 
 
-def query():
-    """
-    dummy malicha api query
+# def query():
+#     """
+#     dummy malicha api query
 
-    :return: json string containing output for processed request.
-    """
-    image_input = cv2.imread("w1.jpg")
-    shape = str(image_input.shape)
-    image_encoding = str(Enigma.encodeInput(image_input))
-    hairstyle_name = "weavon_black_3"
-    category = "tryModel"
-    user_input = {"image_encoding": image_encoding, "shape": shape, "hairstyle_name": hairstyle_name,
-                  "category": category}
+#     :return: json string containing output for processed request.
+#     """
+#     image_input = cv2.imread("w1.jpg")
+#     shape = str(image_input.shape)
+#     image_encoding = str(Enigma.encodeInput(image_input))
+#     hairstyle_name = "weavon_black_3"
+#     category = "tryModel"
+#     user_input = {"image_encoding": image_encoding, "shape": shape, "hairstyle_name": hairstyle_name,
+#                   "category": category}
 
-    return json.dumps(user_input)
+#     return json.dumps(user_input)
 
 
 app = Flask(__name__)
@@ -44,15 +44,7 @@ def malicha_brain():
     :return:
     """
     json_requests = query()
-    return Post(json_requests).get_post()  # render_template("base.html")
-
-@app.route('/www.malicha-ai.herokuapp.com/') # www.malicha-ai.herokuapp.com/')
-def home_page():
-    """
-
-    :return:
-    """
-    return "<h1>Welcome to Malicha, The Future Of Fashion</h1>" # render_template("base.html")
+    return Post(json_requests).get_post() 
 
 
 @app.route('/') # www.malicha-ai.herokuapp.com/')
@@ -61,8 +53,7 @@ def welcome_page():
 
     :return:
     """
-    return "<h1>Welcome to Malicha</h1>" # render_template("base.html")
+    return "OK"  # "<h1>Welcome to Malicha, The Future Of Fashion</h1>"  render_template("base.html")
 
-
-# if __name__ == '__main__':
-app.run()
+if __name__ == '__main__':
+    app.run()
