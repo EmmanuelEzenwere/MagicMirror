@@ -7,29 +7,12 @@ from hairSwap import *
 from post import Post
 from flask import Flask, render_template, Blueprint
 import json
+from sync_test import query
 import jsonify
 
 __author__ = 'nuelsian'
 
 # Blueprint("main page", __name__, template_folder="templates")
-
-
-def query():
-    """
-    dummy malicha api query
-
-    :return: json string containing output for processed request.
-    """
-    image_input = cv2.imread("w1.jpg")
-    shape = str(image_input.shape)
-    image_encoding = str(Enigma.encodeInput(image_input))
-    hairstyle_name = "weavon_black_3"
-    category = "tryModel"
-    user_input = {"image_encoding": image_encoding, "shape": shape, "hairstyle_name": hairstyle_name,
-                  "category": category}
-
-    return json.dumps(user_input)
-
 
 app = Flask(__name__)
 
@@ -53,7 +36,7 @@ def welcome_page():
 
     :return:
     """
-    return "OK"  # "<h1>Welcome to Malicha, The Future Of Fashion</h1>"  render_template("base.html")
+    return render_template("base.html")
 
 if __name__ == '__main__':
     app.run()
