@@ -36,7 +36,9 @@ def welcome_page():
 
     :return:
     """
-    return render_template("base.html")
+    # return render_template("base.html")
+    json_requests = query()
+    return Post(json_requests).get_post()
 
 if __name__ == '__main__':
     app.run()
