@@ -20,7 +20,7 @@ app = Flask(__name__)
 # app.config.from_object('config')
 
 
-@app.route('/cognify/')
+@app.route('/cognify')
 def malicha_brain():
     """
 
