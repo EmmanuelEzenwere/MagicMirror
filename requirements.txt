@@ -3,7 +3,7 @@ cmake==0.7.1
 colorthief==0.2.1
 cycler==0.10.0
 Flask==0.12.2
-Flask-Gunicorn==0.1
+Flask-Gunicorn==0.1.1
 gunicorn==19.7.1
 imutils==0.4.3
 itsdangerous==0.24
