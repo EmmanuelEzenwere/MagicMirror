@@ -1,4 +1,4 @@
-gunicorn==19.7.0
+gunicorn==19.7.1
 click==6.7
 cmake==0.7.1
 colorthief==0.2.1
