@@ -1,105 +1,60 @@
-#                     Database Architecture | Architect: Nuel Ezenwere
-#
-# Malicha {db} -|-hairstyles {collection}   : hairstyles_braids : {"name": str(name), "image_encoding":str(image_encoding), "color_code":color_code, "cost": str(cost)}
-#                                           : hairstyles_weavon : {"name": str(name), "image_encoding":str(image_encoding), "color_code":color_code, "cost": str(cost)}
-#                                           : hairstyles_dreadlocks : {"name": str(name), "image_encoding":str(image_encoding), "color_code":color_code, "cost": str(cost)}
-#                                           : hairstyles_curly : {"name": str(name), "image_encoding":str(image_encoding), "color_code":color_code, "cost": str(cost)}
+#         MagicMirror.ai.       Database Architecture | Architect: Nuel Ezenwere
 
-
-#               |-complexions               : {"name": str(name), "colorcode": str(colorcode)}
-#
-#
-#
 
 import pymongo
+import os
 
 __author__ = 'Ezenwere.Nuel'
 
 
 class Database(object):
-    # URI = "mongodb://Nuelsian:#Nuel11235831@ds111922.mlab.com:11922/malicha"
-    URI = "mongodb://127.0.0.1:27017"
-
+    URI = "mongodb://NuelEzenwere:Nuel11235813@ds143734.mlab.com:43734/magicmirror"  # release version
+    # URI = "mongodb://127.0.0.1:27017"  # local test version
     DATABASE = None
 
     @staticmethod
     def initialize():
         client = pymongo.MongoClient(Database.URI)
-        Database.DATABASE = client['Malicha']
+        # Database.DATABASE = client['MagicMirror']  # local test version
+        Database.DATABASE = client['magicmirror']  # release version
 
         # ************************* database methods ********************************
 
     @staticmethod
     def insert(collection, data):
+        """
+
+        :param collection: database collection to be added to.
+        :param data: dictionary object to be added to the collection.
+        :return: performs the action.
+        For an upgrade this should be extended include a possible errors.
+        """
         Database.DATABASE[collection].insert(data)
 
     @staticmethod
     def find(collection, query):
+        """
+        :param collection: database collection to be added to.
+        :param query: dictionary objects to be obtained from the specified collection.
+        :return: performs the action. .
+        """
         return Database.DATABASE[collection].find(query)
 
     @staticmethod
     def find_one(collection, query):
-        return Database.DATABASE[collection].findOne(query)
-
-    # ****************************************************************************
-
-    # ************************ hairstyles collections method *********************
-    @staticmethod
-    def from_hairstyles_get(collection, query):
-        collection_ = "hairstyles_" + collection
-        return Database.DATABASE[collection_].find(query)
+        """
+        :param collection: database collection to be added to.
+        :param query: dictionary object to be obtained from the specified collection.
+        :return: performs the action.
+        """
+        return Database.DATABASE[collection].find_one(query)
 
     @staticmethod
-    def from_hairstyles_getOne(collection, query):
-        return Database.DATABASE["hairstyles_" + collection].findOne(query)
-
-    @staticmethod
-    def to_hairstyles_insert(collection, data):
-        Database.DATABASE["hairstyles_" + collection].insert(data)
-
-    # ************************ face complexions method ***************************
-    @staticmethod
-    def from_complexions_get(collection, query):
-        return Database.DATABASE["complexions"][collection].find(query)
-
-    @staticmethod
-    def from_complexions_getOne(collection, query):
-        return Database.DATABASE["complexions"][collection].find(query)
-
-    @staticmethod
-    def to_complexions_insert(collection, data):
-        Database.DATABASE["complexions"][collection].insert(data)
-
-    # *****************************************************************************
-
-    # ***********************  datasets method ************************************
-    @staticmethod
-    def to_datasets_insert(collection, data):
-        Database.DATABASE["datasets"][collection].insert(data)
-
-    @staticmethod
-    def from_datasets_get(collection, query):
-        return Database.DATABASE["datasets"][collection].find(query)
-
-    @staticmethod
-    def from_datasets_getOne(collection, query):
-        return Database.DATABASE["datasets"][collection].findOne(query)
-
-    @staticmethod
-    def view_database():
-        return Database.DATABASE.getCollectionNames()
-
-    # ******************************************************************************
-
-    @staticmethod
-    def mongo_bot(action, collection, query):
-        # Future: project mongo-bot
-        # Error correcting bot and task assignment bot.
-        if action == 'find':
-            pass
-        elif action == 'insert':
-            pass
-        elif action == '':
-            pass
-        else:
-            pass
+    def update(collection, query, updated_profile):
+        """
+        :param collection: database collection to be added to.
+        :param query: dictionary object to be obtained from the specified collection.
+        :param updated_profile: updated document for storage, of type: dictionary
+        :return: performs the action.
+        """
+        return Database.DATABASE[collection].update(query, updated_profile)

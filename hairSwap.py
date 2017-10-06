@@ -1,58 +1,32 @@
-#                     Computer Vision | Computer Vision Expert: Nuel Ezenwere
+#                     Computer Vision | Architect : Nuel Ezenwere
 
-
+import numpy.core.multiarray
 import cv2
 import dlib
 import numpy as np
 import os
+# import datetime as dt
+# from skinComplexion import plot_images
+# from PIL import Image
 
 __author__ = 'Ezenwere.Nuel'
 
 
 class FaceSwap(object):
-    def __init__(self, destination_image, sourceface_image):  # hair, face
+    def __init__(self, hairmodel_image, selfie_image):
         """
-        :param destination_image: a numpy array of the primary image ie we use hair from image1.
-        :param sourceface_image: a numpy array representation of an image. we use face from image2, face from image2 is replaced by face from image1
+        :param hairmodel_image: a numpy array of the primary image ie we use hair from image1.
+        :param selfie_image: a numpy array representation of an image. we use face from image2, face from image2 is replaced by face from image1
         """
 
-        # ===================================== Key Regions ============================================================
-        left_eye_points = list(range(42, 48))
-        right_eye_points = list(range(36, 42))
-        nose_points = list(range(27, 35))
-        mouth_points = list(range(48, 61))
-        left_brow_points = list(range(22, 27))
-        right_brow_points = list(range(17, 22))
-        face_points = list(range(17, 68))
-        jaw_points = list(range(0, 17))
-
-        # ==============================================================================================================
-
-        # ============================== landmark indices; Points used to line up the images.===========================
-
-        # Points used to line up the images.
-        align_points = [left_brow_points + right_eye_points + left_eye_points + face_points + jaw_points
-                        + right_brow_points + nose_points + mouth_points]
-
-        # Points from the second image to overlay on the first. The convex hull of each element will be overlaid.
-        overlay_points = [left_eye_points + right_eye_points + left_brow_points + right_brow_points + nose_points
-                          + mouth_points + face_points + jaw_points]
-
-        # ======================================================================================================================
-
-        self.destination_image = destination_image
-        self.sourceface_image = sourceface_image
+        self.destination_image = hairmodel_image
+        self.sourceface_image = selfie_image
         self.convex_hull_color = 1
         self.face_mask_color = 1
         self.scale_factor = 1
         self.colour_correct_blur_frac = 0.6
         self.feather_amount = 1
-        self.landmark_key = {"left_eye_points": list(range(42, 48)), "right_eye_points": list(range(36, 42)),
-                             "nose_points": list(range(27, 35)), "mouth_points": list(range(48, 61)),
-                             "left_brow_points": list(range(22, 27)), "right_brow_points": list(range(17, 22)),
-                             "face_points": list(range(17, 68)), "jaw_points": list(range(0, 17))}
-        self.align_points = align_points
-        self.overlay_points = overlay_points
+        self.align_points = list(range(0, 68))
 
     @staticmethod
     def get_landmarks(image):
@@ -66,34 +40,18 @@ class FaceSwap(object):
         detector = dlib.get_frontal_face_detector()
         rects = detector(image, 1)
 
-        pose_predictor = "shape_predictor_68_face_landmarks.dat"
+        pose_predictor = os.path.dirname(__file__)+"/shape_predictor_68_face_landmarks.dat"
         predictor = dlib.shape_predictor(pose_predictor)
 
         landmarks = np.matrix([[int(p.x), int(p.y)] for p in predictor(image, rects[0]).parts()])
 
         return landmarks
 
-    def rescale(self, image):
-        """
-        :param image: input image to find landmarks
-        :type: numpy array
-        :return: A rescaled version of the input image.
-        :type: matrix of shape image.shape
-        """
-
-        scale_factor = self.scale_factor
-        image_width = image.shape[1]
-        image_height = image.shape[0]
-
-        rescaled_image = cv2.resize(image, (image_width * scale_factor, image_height * scale_factor))
-
-        return rescaled_image
-
     def draw_convex_hull(self, image, points):
         """
         :param image: numpy array on which to draw the convex hull (a convex polyhedral).
-        :param points: coordinates of the vertices of the convex hull/ covex polyhedral to be drawn on the input image.
-        :return: numpy array, with convex hull overlayed on the input image.
+        :param points: coordinates of the vertices of the convex hull/ convex polyhedral to be drawn on the input image.
+        :return: numpy array, with convex hull overlaid on the input image.
         """
         hull_color = self.convex_hull_color
         points = cv2.convexHull(points)
@@ -107,12 +65,11 @@ class FaceSwap(object):
         :return: matrix with same shape as image, a rescaled version of the input image.
         """
 
-        facemask = np.zeros(image.shape, dtype=image.dtype)
+        face_mask = np.zeros(image.shape, dtype=image.dtype)
         face_ConvexHull = np.array(cv2.convexHull(landmarks))[:, 0]
         face_ConvexHull = face_ConvexHull.astype(np.int32)
-        facemask = cv2.fillPoly(facemask, [face_ConvexHull], (255, 255, 255))
-
-        return facemask
+        face_mask = cv2.fillPoly(face_mask, [face_ConvexHull], (255, 255, 255))
+        return face_mask
 
     @staticmethod
     def transformation_from_points(points1, points2):
@@ -154,42 +111,12 @@ class FaceSwap(object):
                        flags=cv2.WARP_INVERSE_MAP)
         return output_image
 
-    def correct_colours(self, template, source, landmarks_image1):
+    @staticmethod
+    def face_center(hairface_landmarks):
         """
-
-        :param template, numpy array,  primary image, to be color corrected to blend with image2 at specified landmarks, the secondary image.
-        :param source, numpy array, secondary image.
-        :param landmarks_image1: matrix of dimension (68x2)
-        :return: image1 with color corrected to blend with image 2 at given landmarks.
-
+        :param hairface_landmarks: np array, each row contains [x,y] co-ordinates of landmarks on the input image
+        :return: (center-x, center-y) co-ordinates of the center of the image.
         """
-        colour_correct_blur_frac = self.colour_correct_blur_frac
-        landmark_key = self.landmark_key
-        left_eye_points = landmark_key["left_eye_points"]
-        right_eye_points = landmark_key["right_eye_points"]
-
-        blur_amount = colour_correct_blur_frac * np.linalg.norm(
-            np.mean(landmarks_image1[left_eye_points], axis=0) - np.mean(landmarks_image1[right_eye_points], axis=0))
-        blur_amount = int(blur_amount)
-
-        # If blur_amount is not even, make it even.
-        if blur_amount % 2 == 0:
-            blur_amount += 1
-
-        # Smooth both images by applying a gaussian blur.
-        image_1_blur = cv2.GaussianBlur(template, (blur_amount, blur_amount), 0)
-        image_2_blur = cv2.GaussianBlur(source, (blur_amount, blur_amount), 0)
-
-        # Avoid divide-by-zero errors.
-        image_2_blur += (128 * (image_2_blur <= 1.0)).astype(image_2_blur.dtype)
-
-        # Smoothed mix of both images.
-        smoothed_mix = (source.astype(np.float64) * image_1_blur.astype(np.float64) / image_2_blur.astype(np.float64))
-
-        return smoothed_mix
-
-    def face_center(self, image):
-        hairface_landmarks = self.get_landmarks(image)
         hairface_ConvexHull = cv2.convexHull(hairface_landmarks)[:, 0]
 
         rect_vertices = cv2.boundingRect(np.float32(hairface_ConvexHull))
@@ -197,46 +124,179 @@ class FaceSwap(object):
 
         return center
 
-    def edgeRefinement(self, source_image, destination_image, sourceface_mask):
+    def edgeRefinement(self, source_image, destination_image, sourceface_mask, hairface_landmarks):
         """
-        :param source_image:
-        :param destination_image:
-        :param sourceface_mask:
+        :param source_image: np.array representation of the selfie model image
+        :param destination_image: np.array representation of the hairstyle model (adjusted) image
+        :param sourceface_mask: np.array (black and white image of the selfie model's face )
+        :param hairface_landmarks: np.array 2d matrix of the hairmodel facial landmarks.
         :return: np.array image of the seamlessly cloned face from the source_image on the template face at the destination
                  image.
         """
-        center = self.face_center(destination_image)
-        edgeblended = cv2.seamlessClone(source_image, destination_image, sourceface_mask, center, cv2.NORMAL_CLONE)
+        center = self.face_center(hairface_landmarks)
+        edge_blended = cv2.seamlessClone(source_image, destination_image, sourceface_mask, center, cv2.NORMAL_CLONE)
 
-        return edgeblended
+        return edge_blended
+
+    @staticmethod
+    def get_lum(image, x, y, w, h, k, gray):
+        """
+        Note to my self (Nuel): I suspect this function returns the lumination of a region bounded by (x, y, w, h, k)
+        :param image:
+        :param x:
+        :param y:
+        :param w:
+        :param h:
+        :param k:
+        :param gray:
+        :return:
+        """
+
+        if gray == 1:
+            image = cv2.cvtColor(image.copy(), cv2.COLOR_BGR2GRAY)
+
+        i1 = range(int(-w/2), int(w/2))
+        j1 = range(0, h)
+
+        lumar = np.zeros((len(i1), len(j1)))
+        for i in i1:
+            for j in j1:
+                lum = np.min(image[y+k*h, x+i])
+                lumar[i][j] = lum
+
+        return np.min(lumar)
 
     def swap(self):
-        destination_image = self.destination_image
-        source_image = self.sourceface_image
-        align_points = self.align_points
-        hairface_landmarks = self.get_landmarks(destination_image)  # hair
-        sourceface_landmarks = self.get_landmarks(source_image)  # face
+        """
 
-        procrustes = self.transformation_from_points(hairface_landmarks[align_points],
-                                                     sourceface_landmarks[align_points])
-        warped_source_image = self.warp(source_image, procrustes, destination_image.shape)
-        warped_sourcefacelandmarks = self.get_landmarks(warped_source_image)
+        :return: np.array. The selfie model with a new hairstyle from the hairmodel.
+        """
+        hairface_landmarks = self.get_landmarks(self.destination_image)  # hair
+        sourceface_landmarks = self.get_landmarks(self.sourceface_image)  # face
+        # # ********** Geometric Model ********************
+        # geometric_model = cv2.fillPoly(self.sourceface_image.copy(), sourceface_landmarks, (255, 255, 255))
+        # model_date = dt.datetime.now()
+        # model_path = os.path.dirname(__file__) + '/file_storage/trash/test_' + str(model_date) + '.jpg'
+        # cv2.imwrite(model_path, geometric_model)
+        # geometric_model = Image.open(model_path)
+        # # ************************************************
+        # plot_images(geometric_model, 'geometric model')
+        # # ************************************************
+        procrustes = self.transformation_from_points(sourceface_landmarks[self.align_points], hairface_landmarks[self.align_points])
+        warped_destination_image = self.warp(self.destination_image, procrustes, self.sourceface_image.shape)  # self.sourceface_image.shape)
+        # warped_hairface_landmarks = self.get_landmarks(warped_destination_image)
 
-        hair_facemask = self.get_facemask(destination_image, hairface_landmarks)
-        source_facemask = self.get_facemask(warped_source_image, warped_sourcefacelandmarks)
-        combined_facemask = np.max([source_facemask, hair_facemask], axis=0)
+        # obtain the landmark parameters as a list.
+        p17 = tuple(sourceface_landmarks[17].tolist()[0])
+        p19 = tuple(sourceface_landmarks[19].tolist()[0])
+        p24 = tuple(sourceface_landmarks[24].tolist()[0])
+        p26 = tuple(sourceface_landmarks[26].tolist()[0])
+        p6 = tuple(sourceface_landmarks[6].tolist()[0])
+        p10 = tuple(sourceface_landmarks[10].tolist()[0])
 
-        newlook = self.edgeRefinement(warped_source_image, destination_image, combined_facemask)
+        # Calculate the distance btw (p6, p24)
+        r6_24 = np.linalg.norm(np.matrix(p6) - np.matrix(p24))
+        # Calculate the distance btw (p10, p17)
+        r10_17 = np.linalg.norm(np.matrix(p10) - np.matrix(p17))
+        # Calculate the distance btw (p6, p26)
+        r6_26 = np.linalg.norm(np.matrix(p6) - np.matrix(p26))
+        # Calculate the distance btw (p6, p19)
+        r6_19 = np.linalg.norm(np.matrix(p6) - np.matrix(p19))
+
+        # Calculate the translation/increment.
+
+        # Euclidean distance from p10 to p17
+        r1 = r10_17 * (1 + 1/8)
+        # Euclidean distance from p6 to p68
+        r2 = r6_19 * (1 + 1/8)
+        # Euclidean distance from p6 to p69
+        r3 = r6_24 * (1 + 1/8)
+        # Euclidean distance from p6 to p70
+        r4 = r6_26 * (1 + 1/8)
+
+        # Angle between line 10,17 and x-axis
+        p10x, p10y = p10
+        p17x, p17y = p17
+        theta1 = np.math.atan(abs((p17y - p10y) / (p17x - p10x)))
+
+        # Angle between line 6,19 and x-axis
+        p6x, p6y = p6
+        p19x, p19y = p19
+        theta2 = np.math.atan(abs((p19y - p6y) / (p19x - p6x)))
+
+        # Angle between line 6,24 and x-axis
+        p24x, p24y = p24
+        theta3 = np.math.atan(abs((p24y - p6y) / (p24x - p6x)))
+
+        # Angle between line 6,26 and x-axis
+        p26x, p26y = p26
+        theta4 = np.math.atan(abs((p26y - p6y) / (p26x - p6x)))
+
+        p68 = (int(p6x - r2 * np.cos(theta2)), int(p6y - r2 * np.sin(theta2)))
+        p69 = (int(p6x + r3 * np.cos(theta3)), int(p6y - r3 * np.sin(theta3)))
+        p70 = (int(p10x - r1 * np.cos(theta1)), int(p10y - r1 * np.sin(theta1)))
+        p71 = (int(p6x + r4 * np.cos(theta4)), int(p6y - r4 * np.sin(theta4)))
+        # test_img = self.sourceface_image.copy()
+        # cv2.circle(test_img, (p24[0], p24[1]), 3, color=(255, 153, 0))
+        # cv2.circle(test_img, (p19[0], p19[1]), 3, color=(255, 153, 0))
+        # cv2.circle(test_img, (p6[0], p6[1]), 3, color=(255, 153, 0))
+        # cv2.circle(test_img, (p17[0], p17[1]), 3, color=(255, 153, 0))
+        # cv2.circle(test_img, (p26[0], p26[1]), 3, color=(255, 153, 0))
+        # cv2.circle(test_img, (p6[0], p6[1]), 3, color=(255, 153, 0))
+        # cv2.circle(test_img, p68, 3, color=(255, 153, 0))
+        # cv2.circle(test_img, p69, 3, color=(255, 153, 0))
+        # cv2.circle(test_img, p70, 3, color=(255, 153, 0))
+        # cv2.circle(test_img, p71, 3, color=(255, 153, 0))
+        #
+        # plot_images(test_img, 'heart')
+        # for i in range(0, 68):
+        #     pi = tuple(warped_hairface_landmarks[i].tolist()[0])
+        #     cv2.circle(test_img, pi, 3, color=(255, 0, 0))
+        # plot_images(test_img, 'heart')
+        sourceface_landmarks_aug = sourceface_landmarks.copy()
+        sourceface_landmarks_aug[19, 0] = p68[0]
+        sourceface_landmarks_aug[19, 1] = p68[1]
+        sourceface_landmarks_aug[24, 0] = p69[0]
+        sourceface_landmarks_aug[24, 1] = p69[1]
+        sourceface_landmarks_aug[17, 0] = p70[0]
+        sourceface_landmarks_aug[17, 1] = p70[1]
+        sourceface_landmarks_aug[26, 0] = p71[0]
+        sourceface_landmarks_aug[26, 1] = p71[1]
+
+        # sourceface_image_copy = self.sourceface_image.copy()
+        # for i in np.array(sourceface_landmarks_aug):
+        #     print(tuple(i))
+        #     print(cv2.circle(sourceface_image_copy, tuple(i), 3, color=(255, 153, 0)))
+        # plot_images(sourceface_image_copy, 'test1')
+        # hair_facemask = self.get_facemask(warped_destination_image, warped_hairface_landmarks)
+        source_facemask = self.get_facemask(self.sourceface_image, sourceface_landmarks_aug)
+        # combined_facemask = np.max([source_facemask, hair_facemask], axis=0)
+        combined_facemask = source_facemask
+        newlook = self.edgeRefinement(self.sourceface_image, warped_destination_image, combined_facemask, sourceface_landmarks_aug)
+
+        # re-shapen newlook
+        newlook_landmark = np.array(self.get_landmarks(newlook))
+        xmax, ymax = newlook_landmark.max(axis=0)
+        newlook = newlook.copy()[0:ymax, 0:newlook.shape[1]]
 
         return newlook
 
-    def display_newlook(self):
-        win = dlib.image_window()
-        win.set_image(self.swap())
-        dlib.hit_enter_to_continue()
-        return None
 
-    def save_newlook(self, filename):
-        newlook = self.swap()
-        cv2.imwrite(str(filename), newlook)
-        return "saved newlook to " + str(filename) + " ..."
+# base_path = os.path.dirname(__file__)
+# # /home/higgsfield/PycharmProjects/MagicMirror.ai/file_storage/trash/oval/white
+# test_date = dt.datetime.now()
+# save_path = base_path+'/file_storage/trash/test_'+str(test_date)+'.jpg'
+# img2_path = base_path+'/file_storage/trash/heart/white/5.jpg'
+# img1_path = base_path+'/file_storage/trash/heart/white/heart_ahannigan4.jpg'
+# img1 = Image.open(img1_path)
+# img2 = Image.open(img2_path)
+# plot_images(img1, 'test1')
+# plot_images(img2, 'test2')
+# img = FaceSwap(cv2.imread(img2_path), cv2.imread(img1_path)).swap()
+# cv2.imwrite(save_path, img)
+# img = Image.open(save_path)
+# plot_images(img, 'heart')
+
+# Next research -- algorithm to change skin tone.
+# Investigation the precision of the center of the hairface model supplied for seamless cloning : center = (int(rect_vertices[0]) + int(rect_vertices[2] / 2), int(rect_vertices[1]) + int(rect_ve
+# Olotu square -- Incubator
