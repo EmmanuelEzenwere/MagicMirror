@@ -1,5 +1,5 @@
 gunicorn
-boost==1.0
+boost==0.1
 boost-py==1.0.0
 click==6.7
 cmake==0.7.1
