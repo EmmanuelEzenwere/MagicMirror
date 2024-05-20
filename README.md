@@ -1,13 +1,14 @@
-# HairTransfer is a python program that uses computer vision and deep learning to transfer hairstyle from one face to another.
+# HairTransfer
 
-Deep learning is applied to recognize faceshapes to customize user hairstyle feed to only consist of faces with similar face shape to ensure quality hairTransfer.
+HairTransfer is a Python program that uses computer vision and deep learning to transfer hairstyles from one face to another.
 
-Tensorflow was used for Deep Learning. The Inception V3 Deep Learning Model was retrained to recognize five face shapes.
+Deep learning is applied to recognize face shapes to customize user hairstyle feeds to only consist of faces with similar face shapes to ensure quality HairTransfer.
 
+TensorFlow was used for deep learning. The Inception V3 deep learning model was retrained to recognize five face shapes.
 
+<div style="display: flex; justify-content: center; gap: 10px;">
+    <img src="file_storage/trash/temp_files/profile_pic.jpg" alt="Profile Pic" width="300" height="300">
+    <img src="file_storage/hairstyles/female/4.jpg" alt="Hairstyle" width="300" height="300">
+</div>
 
-![Project Logo](file_storage/trash/temp_files/profile_pic.jpg)
-![Project Logo](file_storage/hairstyles/female/4.jpg)
-
-
-Credits: https://matthewearl.github.io/2015/07/28/switching-eds-with-python/ 
+Credits: [Switching Eds with Python](https://matthewearl.github.io/2015/07/28/switching-eds-with-python/)
