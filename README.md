@@ -4,4 +4,10 @@ Deep learning is applied to recognize faceshapes to customize user hairstyle fee
 
 Tensorflow was used for Deep Learning. The Inception V3 Deep Learning Model was retrained to recognize five face shapes.
 
+
+
+![Project Logo](file_storage/trash/temp_files/profile_pic.jpg)
+![Project Logo](file_storage/hairstyles/female/4.jpg)
+
+
 Credits: https://matthewearl.github.io/2015/07/28/switching-eds-with-python/ 
