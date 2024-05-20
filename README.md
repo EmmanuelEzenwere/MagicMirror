@@ -8,10 +8,10 @@ TensorFlow was used for deep learning. The Inception V3 deep learning model was 
 
 <div style="display: flex; justify-content: center; gap: 10px;">
     <div style="width: 300px; height: 300px; overflow: hidden;">
-        <img src="file_storage/trash/temp_files/profile_pic.jpg" alt="Profile Pic" style="width: 100%; height: auto;">
+        <img src="file_storage/trash/temp_files/profile_pic.jpg" alt="Profile Pic" style="width: 100%; height: 100%; object-fit: cover;">
     </div>
     <div style="width: 300px; height: 300px; overflow: hidden;">
-        <img src="file_storage/hairstyles/female/4.jpg" alt="Hairstyle" style="width: 100%; height: auto;">
+        <img src="file_storage/hairstyles/female/4.jpg" alt="Hairstyle" style="width: 100%; height: 100%; object-fit: cover;">
     </div>
 </div>
 
