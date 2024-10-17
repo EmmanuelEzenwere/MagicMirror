@@ -38,11 +38,11 @@ class RelevancyScore(object):
 
     def update(self, hair_model_id):
         """
-        using the chronological dating  and the number of likes of a hairstyle model this algorithm will assign a score to all hairstyles under a given
+        using the chronological date  and the number of likes of a hairstyle model this algorithm assigns a score to all hairstyles under a given
         category (eg. afro, ...) = a dictionary with keys as hairstyle model ids and values as relevancy score.
 
-        Sort the hairstyles according to their relevancy score into a list...
-        Stream the sorted hairstyles available to the a user in a Hairstyle.feed.
+        - Sort the hairstyles into a list, according to their relevancy score.
+        - Stream the sorted hairstyles available to the a user in a Hairstyle.feed.
 
                                           | The Almighty algorithm |
 
