@@ -37,18 +37,17 @@ class RelevancyScore(object):
         return age_
 
     def update(self, hair_model_id):
-        """
+        """            
+                                          | The Almighty algorithm |
         using the chronological date  and the number of likes of a hairstyle model this algorithm assigns a score to all hairstyles under a given
         category (eg. afro, ...) = a dictionary with keys as hairstyle model ids and values as relevancy score.
 
         - Sort the hairstyles into a list, according to their relevancy score.
         - Stream the sorted hairstyles available to the a user in a Hairstyle.feed.
-
-                                          | The Almighty algorithm |
-
-        Decides the order of uploads to ensure premium quality hairstyles are presented first. Keeps users satisfied.
-        Possibly removes terrible hairstyle uploads from the hairstyle stream.
-
+        - Decides the order of uploads to ensure premium quality hairstyles are presented first. 
+        - Remove terrible hairstyle uploads from the hairstyle stream. (future support)
+        - Keeps users satisfied with the quality of the Hairstyle Feed.
+        
         Each time a user likes a hairstyle post, it's relevancy score is updated.
 
         :return: Reach into hairstyle database, copy current relevancy score then increment.
