@@ -10,8 +10,9 @@ Implicitly, hair transfer uses face swapping but a modest attempt is made here t
 TensorFlow was used for deep learning. The Inception V3 deep learning model was retrained to recognize five face shapes.
 
 <div style="display: flex; justify-content: center; gap: 10px;">
-    <img src="file_storage/trash/temp_files/profile_pic.jpg" style="width: auto; height: 100%;">
-    <img src="file_storage/hairstyles/female/4.jpeg" style="width: auto; height: 100%;">
+    <img src="file_storage/trash/temp_files/WhatsApp Image 2024-10-20 at 01.03.35-2.jpeg" style="width: auto; height: 100%;">
+    <img src="file_storage/hairstyles/female/WhatsApp Image 2024-10-20 at 01.03.35-2.jpeg" style="width: auto; height: 100%;">
+    <img src="file_storage/hairstyles/female/WhatsApp Image 2024-10-20 at 01.03.35-2.jpeg" style="width: auto; height: 100%;">
 </div>
 
 
