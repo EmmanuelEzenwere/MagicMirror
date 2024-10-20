@@ -1,6 +1,6 @@
-# HairTransfer
+# MagicMirror
 
-HairTransfer is a Python application that uses computer vision; image processing and deep learning to transfer hairstyles from a face (a source image) to another (a target image).
+MagicMirror is a Python application that uses computer vision; image processing and deep learning to transfer hairstyles from a face (a source image) to another (a target image).
 
 Deep learning is applied to recognize face shapes, which is then used to filter user hairstyle feeds to only display faces with similar face shapes to ensure high quality Hair Transfer.
 
