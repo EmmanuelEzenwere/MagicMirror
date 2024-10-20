@@ -9,11 +9,11 @@ Implicitly, hair transfer uses face swapping but a modest attempt is made here t
 
 TensorFlow was used for deep learning. The Inception V3 deep learning model was retrained to recognize five face shapes.
 
-<div style="display: flex; justify-content: center; gap: 10px;">
-    <img src="file_storage/trash/temp_files/WhatsApp Image 2024-10-20 at 01.03.35-2.jpeg" style="width: auto; height: 100%;">
-    <img src="file_storage/hairstyles/female/WhatsApp Image 2024-10-20 at 01.03.35-2.jpeg" style="width: auto; height: 100%;">
-    <img src="file_storage/hairstyles/female/WhatsApp Image 2024-10-20 at 01.03.35-2.jpeg" style="width: auto; height: 100%;">
-</div>
+<p align="center">
+  <img src="file_storage/general/source_image.jpeg" width="30%" />
+  <img src="file_storage/general/target_image.jpeg" width="30%" />
+  <img src="file_storage/general/output_image.jpeg" width="30%" />
+</p>
 
 
 Credits: [Switching Eds with Python](https://matthewearl.github.io/2015/07/28/switching-eds-with-python/)
