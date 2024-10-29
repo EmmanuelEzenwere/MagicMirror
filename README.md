@@ -15,5 +15,30 @@ TensorFlow was used for deep learning. The Inception V3 deep learning model was 
   <img src="file_storage/general/output_image.jpeg" width="30%" />
 </p>
 
+## Quick Start
 
+### Prerequisites
+
+- Python 3.6+
+- pip package manager
+
+### Installation
+
+1. **Create and activate a virtual environment**
+   ```bash
+   # Create virtual environment
+   python3 -m venv myenv
+   
+   # Activate virtual environment
+   # On Unix/macOS:
+   source myenv/bin/activate
+   # On Windows:
+   myenv\Scripts\activate
+   ```
+
+2. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+   
 Credits: [Switching Eds with Python](https://matthewearl.github.io/2015/07/28/switching-eds-with-python/)
