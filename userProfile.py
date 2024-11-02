@@ -15,13 +15,18 @@ class UserProfile(object):
         Database.initialize()
 
     def profile(self):
-        """
-        :return: users face shape, skin_color.
-        # we could extend the user's profile to include other details in the future such as appearance rating, make up metrics, ...
+        """ 
+        Get information on the user eg. username.
+        
+        user's profile to include other details in the future 
+        such as appearance rating, make up metrics, ...
+
+        Returns:
+            user_profile(dict): users face shape, skin_color.
         """
         user_name = self.user_name
-        profile_dict = Database.find_one('users', {'users': user_name})
-        return profile_dict
+        user_profile = Database.find_one('users', {'users': user_name})
+        return user_profile
 
     def add_user(self, password, gender, users_face_path):
         """
@@ -41,7 +46,14 @@ class UserProfile(object):
         no_of_users = self.count(img_dir) + 1
 
         img_path = img_dir + str(self.user_name) + '.jpg'
-        profile_dict = {"user_name": self.user_name, "password": password, "gender": gender, "face_shape": face_shape, "skin_complexion": skin_complexion, 'index': no_of_users, 'storage_location': img_path}
+        profile_dict = {"user_name": self.user_name, 
+                        "password": password, 
+                        "gender": gender, 
+                        "face_shape": face_shape, 
+                        "skin_complexion": skin_complexion, 
+                        'index': no_of_users, 
+                        'storage_location': img_path}
+        
         Database.insert('users', profile_dict)
         selfie = Image.open(users_face_path)
         selfie.save(img_path)
@@ -55,7 +67,9 @@ class UserProfile(object):
         :param password: string, user's password.
         :return status: string, authenticated, invalid or sign-in duplicate.
         """
-        search_dict = Database.find_one('users', {'username': self.user_name, 'password': password})
+        search_dict = Database.find_one('users', {'username': self.user_name, 
+                                                  'password': password}
+                                        )
         if len(search_dict) == 1:
             status = 'authenticated'
         elif len(search_dict) == 0:
@@ -72,15 +86,21 @@ class UserProfile(object):
             os.makedirs(directory)
 
     def construct_path(self, category, style):
-        """
+        """_summary_
 
-        :return:
+        Args:
+            category (_type_): _description_
+            style (_type_): _description_
+
+        Returns:
+            _type_: _description_
         """
         user_profile = self.profile()
         gender = user_profile['gender']
         face_shape = user_profile['face_shape']
         skin_complexion = user_profile['skin_complexion']
-        img_dir = os.path.dirname(__file__)+'/file_storage/hairstyles/' + face_shape + '/' + skin_complexion + '/' + gender + '/' + category + '/' + style
+        attributes = face_shape + '/' + skin_complexion + '/' + gender + '/' + category + '/' + style
+        img_dir = os.path.dirname(__file__)+'/file_storage/hairstyles/' + attributes
 
         return img_dir
 
@@ -98,12 +118,19 @@ class UserProfile(object):
 
     @staticmethod
     def retrieve(category, style, index):
-        """
-        Goes into the MagicMirror.ai hairstyle database and retrieves a specified hairstyle.
+        """Goes into the MagicMirror.ai hairstyle database and retrieves a specified hairstyle.
         :param index: this is the index of hairstyle models to be retrieved
         :param category:
         :param style:
         :return: image bytes representation of the given hairstyle
+
+        Args:
+            category (_type_): _description_
+            style (_type_): _description_
+            index (_type_): _description_
+
+        Returns:
+            image: image bytes representation of the given hairstyle
         """
         # save hairstyle to database.
         hairstyle_profile = Database.find_one('hairstyles', {'category': category, 'style': style, 'index': index})
@@ -115,7 +142,17 @@ class UserProfile(object):
             return 'requested hairstyle model does not exist'
 
     def upload_hairstyle(self, hair_model_path, gender, category, style):
-        """Saves a newly uploaded hairstyle image to the hairstyle database considering the user's profile. and hairstyle details.
+        """Saves a newly uploaded hairstyle image to the hairstyle database 
+        considering the user's profile. and hairstyle details.
+
+        Args:
+            hair_model_path (_type_): _description_
+            gender (_type_): _description_
+            category (_type_): _description_
+            style (_type_): _description_
+
+        Returns:
+            _type_: _description_
         """
 
         from faceShape import getFaceShape
@@ -124,9 +161,9 @@ class UserProfile(object):
 
         from skinComplexion import SkinComplexion
         skin_complexion = SkinComplexion(hair_model_path).identify()
-
+        hair_attributes = gender + '/' + category + '/' + style + '/' + face_shape + '/' + skin_complexion +'/'
         img_dir = os.path.dirname(
-            __file__) + '/file_storage/hairstyles/' + gender + '/' + category + '/' + style + '/' + face_shape + '/' + skin_complexion +'/'
+            __file__) + '/file_storage/hairstyles/' + hair_attributes
 
         self.ensure_dir(img_dir)
         no_of_hairmodels = self.count(img_dir) + 1
@@ -136,16 +173,24 @@ class UserProfile(object):
         created_date = dt.datetime.now()
         default_relevancy_score = 1
 
-        profile_dict = {"category": category, 'style': style, 'index': no_of_hairmodels, "creator": self.user_name, "gender": gender,
-                        "face_shape": face_shape, "skin_complexion": skin_complexion, "created_date": created_date,
-                        'relevancy_score': default_relevancy_score, 'likes': 1, 'storage_location': image_path}
+        profile_dict = {"category": category, 
+                        'style': style, 
+                        'index': no_of_hairmodels,
+                        "creator": self.user_name, 
+                        "gender": gender,
+                        "face_shape": face_shape, 
+                        "skin_complexion": skin_complexion, 
+                        "created_date": created_date,
+                        'relevancy_score': default_relevancy_score, 
+                        'likes': 1, 
+                        'storage_location': image_path}
 
         # save hairstyle to database.
         Database.insert('hairstyles', profile_dict)
 
         return 'hair models created and added to database.'
 
-# Dev Notes.
+# Feature Request: Dev Notes.
 
-# brainstorming on possible information to learn from a users face for drea.ai
-# Cosmetic products they need. This will be used for recommendation.
+# What are possible information to learn from a users face for Drea.ai personal assistant?
+# What Cosmetic products could the user need. This will be used for product recommendation.
