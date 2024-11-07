@@ -5,7 +5,9 @@ import datetime as dt
 
 
 class RelevancyScore(object):
-    default_relevancyScore = 1  # modify as necessary, a modification here is effected in all usage instances, domino effect.
+    # modify as necessary, a modification here is effected in all usage instances,
+    # domino effect.
+    default_relevancyScore = 1  
 
     def __init__(self, user_name):
         self.user_name = user_name
@@ -16,7 +18,8 @@ class RelevancyScore(object):
     def profile(hair_model_id):
         """
         :return profile document: type dictionary, users face shape, skin_color.
-        # we could extend the user's profile to include other details in the future such as appearance rating, make up metrics, ...
+        # we could extend the user's profile to include other details in the future 
+        # such as appearance rating, make up metrics, ...
         """
         profile_dict = Database.find_one('hairstyles', {'_id': ObjectId(hair_model_id)})
 
@@ -39,7 +42,8 @@ class RelevancyScore(object):
     def update(self, hair_model_id):
         """            
                                           | The Almighty algorithm |
-        using the chronological date  and the number of likes of a hairstyle model this algorithm assigns a score to all hairstyles under a given
+        using the chronological date  and the number of likes of a hairstyle model this algorithm assigns
+        a score to all hairstyles under a given
         category (eg. afro, ...) = a dictionary with keys as hairstyle model ids and values as relevancy score.
 
         - Sort the hairstyles into a list, according to their relevancy score.
