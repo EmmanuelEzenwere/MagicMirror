@@ -1,3 +1,5 @@
+"""
+"""
 import os
 import cv2
 import numpy as np
@@ -9,6 +11,11 @@ from relevancyScore import RelevancyScore
 
 
 def ensure_dir(img_dir):
+    """_summary_
+
+    Args:
+        img_dir (_type_): _description_
+    """
     directory = os.path.dirname(img_dir)
     if not os.path.isdir(directory):
         os.makedirs(directory)
@@ -40,6 +47,8 @@ def timestamp():
 
 
 def upload_hairstyle(request_obj):
+    """
+    """
     if 'selfie' not in request_obj.files and 'gender' not in request_obj.form and 'category' not in request_obj.form and 'style' not in request_obj.form:
         return "failed status.HTTP_400_BAD_REQUEST"
 
@@ -76,6 +85,7 @@ def perform_swap(request_obj):
     """
     # ****************************** Possible Security Layer *************************************
     # to ensure that the user accessing the hairswap feature has permission/ in the user data base
+    # using an API key will be preferred, also match against username and email address.
     if 'username' not in request_obj.form and 'uploader' not in request_obj.form and 'selfie' not in request_obj.files and 'hair_model' not in request_obj.files:
         return "failed status.HTTP_400_BAD_REQUEST"
     # ********************************************************************************************
@@ -119,7 +129,6 @@ def perform_swap(request_obj):
     cv2.imwrite(swap_path, new_look)
 
     return swap_path
-
 
 def increment_rScore(request_obj):
     """

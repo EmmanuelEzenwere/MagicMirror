@@ -1,10 +1,12 @@
-#         MagicMirror.ai.       Database Architecture | Architect: Nuel Ezenwere
+# **************************************************************************************************
+# Copyright: © MagicMirror.ai, 6 June 2017
+# Author: Nuel Ezenwere
+# Description: Database Architect at MagicMirror.ai
+# **************************************************************************************************
 
 
 import pymongo
 import os
-
-__author__ = 'Ezenwere.Nuel'
 
 
 class Database(object):

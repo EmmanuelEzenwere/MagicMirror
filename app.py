@@ -1,6 +1,10 @@
-# # ********************************** | MagicMirror.ai | Ai scientist: Nuel.Ezenwere *****************************************************
-# #                                                    6 June 2017
-#
+# **************************************************************************************************
+# Copyright: © MagicMirror.ai, 6 June 2017
+# Author: Nuel Ezenwere
+# Description: AI Scientist at MagicMirror.ai
+# **************************************************************************************************
+
+
 
 from flask import Flask, request, send_file
 import QuantumProcessor
