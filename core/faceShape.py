@@ -1,3 +1,8 @@
+# **************************************************************************************************
+# Copyright: © MagicMirror.ai, 6 June 2017
+# Author: Nuel Ezenwere
+# Description: Computer Vision Engineer at MagicMirror.ai
+# **************************************************************************************************
 # This script runs the re-trained Inception model to classify a single or a batch of images
 
 
@@ -18,6 +23,12 @@ import tensorflow as tf
 
 
 def plot_images(image, Caption1):
+    """_summary_
+
+    Args:
+        image (_type_): _description_
+        Caption1 (_type_): _description_
+    """
     # plt.close()
 
     plt.rcParams['text.usetex'] = False

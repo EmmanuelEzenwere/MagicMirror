@@ -4,10 +4,10 @@ import os
 import cv2
 import numpy as np
 from datetime import datetime
-from hairstyleFeed import HairstyleFeed
-from userProfile import UserProfile
-from hairSwap import FaceSwap
-from relevancyScore import RelevancyScore
+from app.pages.hairstyleFeed import HairstyleFeed
+from app.pages.userProfile import UserProfile
+from core.hairSwap import FaceSwap
+from app.pages.relevancyScore import RelevancyScore
 
 
 def ensure_dir(img_dir):

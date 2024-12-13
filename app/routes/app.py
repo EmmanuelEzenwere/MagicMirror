@@ -73,7 +73,7 @@ def test_run():
     """
     :return: image:bytes , swap hairstyle of in selfie with the hairstyle image.
     """
-    from dummy_request import DummyRequest
+    from tests.dummy_request import DummyRequest
     filename = QuantumProcessor.perform_swap(DummyRequest)
     return send_file(filename)
 

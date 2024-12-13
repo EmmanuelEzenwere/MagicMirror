@@ -1,3 +1,9 @@
+# **************************************************************************************************
+# Copyright: © MagicMirror.ai, 6 June 2017
+# Author: Nuel Ezenwere
+# Description: Computer Vision Engineer at MagicMirror.ai
+# **************************************************************************************************
+# 
 import os
 import cv2
 

@@ -1,11 +1,15 @@
-#                     Database Architecture | Architect: Nuel Ezenwere
+# **************************************************************************************************
+# Copyright: © MagicMirror.ai, 6 June 2017
+# Author: Nuel Ezenwere
+# Description: Database Architect at MagicMirror.ai
+# **************************************************************************************************
 
 import os
 
 import cv2
 
-from faceShape import getFaceShape
-from skinComplexion import SkinComplexion
+from core.faceShape import getFaceShape
+from core.skinComplexion import SkinComplexion
 
 __author__ = 'Ezenwere.Nuel'
 

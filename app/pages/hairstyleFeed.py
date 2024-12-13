@@ -1,5 +1,5 @@
-from database import Database
-from userProfile import UserProfile
+from database.database import Database
+from app.pages.userProfile import UserProfile
 from PIL import Image
 from operator import itemgetter
 

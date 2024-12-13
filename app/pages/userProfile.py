@@ -1,7 +1,7 @@
 import os
 import datetime as dt
 from PIL import Image
-from database import Database
+from database.database import Database
 
 
 class UserProfile(object):
@@ -35,11 +35,11 @@ class UserProfile(object):
         :param gender: string, sex of the user, strictly male or female.
         """
 
-        from faceShape import getFaceShape
+        from core.faceShape import getFaceShape
         face_shape = getFaceShape(users_face_path)
         print("face_shape:", face_shape)
 
-        from skinComplexion import SkinComplexion
+        from core.skinComplexion import SkinComplexion
         skin_complexion = SkinComplexion(users_face_path).identify()
 
         img_dir = os.path.dirname(__file__) + '/file_storage/users/' + str(gender) + '/'
@@ -155,11 +155,11 @@ class UserProfile(object):
             _type_: _description_
         """
 
-        from faceShape import getFaceShape
+        from core.faceShape import getFaceShape
         #  hair_model_path is expected to be the full path to the uploaded hair model.
         face_shape = getFaceShape(hair_model_path)
 
-        from skinComplexion import SkinComplexion
+        from core.skinComplexion import SkinComplexion
         skin_complexion = SkinComplexion(hair_model_path).identify()
         hair_attributes = gender + '/' + category + '/' + style + '/' + face_shape + '/' + skin_complexion +'/'
         img_dir = os.path.dirname(
