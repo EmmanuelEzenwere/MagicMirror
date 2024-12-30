@@ -17,6 +17,11 @@ __author__ = 'Ezenwere.Nuel'
 
 
 class FaceSwap(object):
+    """_summary_
+
+    Args:
+        object (_type_): _description_
+    """
     def __init__(self, hairmodel_image, selfie_image):
         """
         :param hairmodel_image: a numpy array of the primary image ie we use hair from image1.
