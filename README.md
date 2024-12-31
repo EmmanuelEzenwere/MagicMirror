@@ -1,5 +1,9 @@
 # MagicMirror
 
+<p align="center">
+  <img src="data/file_storage/general/MagicMirrorAI-Logo.jpg" width="50%" />
+</p>
+
 MagicMirror is a Python application that uses computer vision; image processing and deep learning to transfer hairstyles from a face (a source image) to another (a target image).
 
 Deep learning is applied to recognize face shapes, which is then used to filter user hairstyle feeds to only display faces with similar face shapes to ensure high quality Hair Transfer.
@@ -13,6 +17,11 @@ TensorFlow was used for deep learning. The Inception V3 deep learning model was 
   <img src="data/file_storage/general/source_image.jpeg" width="30%" />
   <img src="data/file_storage/general/target_image.jpeg" width="30%" />
   <img src="data/file_storage/general/output_image.jpeg" width="30%" />
+</p>
+<p align="center">
+  <img src="data/file_storage/general/SwapRoom.jpg" width="30%" />
+  <img src="data/file_storage/general/SwapRoom2.jpg" width="30%" />
+  <img src="data/file_storage/general/DreaAI.jpg" width="30%" />
 </p>
 
 ## Quick Start
