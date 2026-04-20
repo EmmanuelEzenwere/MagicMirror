@@ -4,10 +4,12 @@
 # Description: AI Scientist at MagicMirror.ai
 # **************************************************************************************************
 
-
-
 from flask import Flask, request, send_file
-import QuantumProcessor
+import services.auth as auth
+import app.services.feed as feed
+from tests.dummy_request import DummyRequest
+
+
 __author__ = 'nuelsian'
 
 app = Flask(__name__)
@@ -18,7 +20,7 @@ def sign_up():
     """
     :return: string, success if a sign up process was successful. Otherwise, failed.
     """
-    status = QuantumProcessor.sign_up(request)
+    status = auth.sign_up(request)
     return status
 
 
@@ -27,7 +29,7 @@ def sign_in():
     """
     :return: string, success if a sign up process was successful. Otherwise, failed.
     """
-    status = QuantumProcessor.sign_in(request)
+    status = auth.sign_in(request)
     return status
 
 
@@ -36,7 +38,7 @@ def swap_hairstyle():
     """
     :return: image:bytes , swap hairstyle of in selfie with the hairstyle image.
     """
-    filename = QuantumProcessor.perform_swap(request)
+    filename = feed.perform_swap(request)
     return send_file(filename)
 
 
@@ -45,7 +47,7 @@ def upload_hairstyle():
     """
     :return: post an image of the user with the new hairstyle.
     """
-    status = QuantumProcessor.upload_hairstyle(request)
+    status = feed.upload_hairstyle(request)
     return status
 
 
@@ -54,7 +56,7 @@ def update_relevancyScore():
     """
     :return: whenever this end point is accessed the input hairstyle's relevancy score should be incremented.
     """
-    status = QuantumProcessor.increment_rScore(request)
+    status = feed.increment_rScore(request)
     return status
 
 
@@ -63,9 +65,7 @@ def get_hairstylefeed():
     """
     :return: images of hairstyle models from the hairstyle feed.
     """
-
-    feed = QuantumProcessor.stream_feed(request)
-    return feed
+    return feed.stream_feed(request)
 
 
 @app.route('/test')
@@ -73,8 +73,7 @@ def test_run():
     """
     :return: image:bytes , swap hairstyle of in selfie with the hairstyle image.
     """
-    from tests.dummy_request import DummyRequest
-    filename = QuantumProcessor.perform_swap(DummyRequest)
+    filename = feed.perform_swap(DummyRequest)
     return send_file(filename)
 
 
