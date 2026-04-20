@@ -37,7 +37,7 @@ TensorFlow was used for deep learning. The Inception V3 deep learning model was 
    ```bash
    # Create virtual environment
    python3 -m venv myenv
-   
+
    # Activate virtual environment
    # On Unix/macOS:
    source myenv/bin/activate
@@ -49,5 +49,50 @@ TensorFlow was used for deep learning. The Inception V3 deep learning model was 
    ```bash
    pip install -r requirements.txt
    ```
-   
+
+
+
+**Running the Application**
+
+Development mode
+
+  ```bash
+  python app/main.py
+  ```
+
+or
+```
+flask run
+```
+
+
+**Production Deployment**
+
+This project uses a Procfile for deployment.
+
+Procfile
+
+      web: gunicorn app:app --log-file -
+
+
+
+**Deployment Platforms**
+
+This project is compatible with:
+
+* Heroku
+* Render
+* Railway
+* AWS Elastic Beanstalk
+
+
+**Technical Overview**
+
+* Computer Vision: OpenCV
+* Deep Learning: TensorFlow (Inception V3 fine-tuned)
+* Image Processing: NumPy + OpenCV
+* Face Shape Classification: 5 categories
+* Core feature: AI-driven hairstyle transfer using face-aware filtering
+
+
 Credits: [Switching Eds with Python](https://matthewearl.github.io/2015/07/28/switching-eds-with-python/)
